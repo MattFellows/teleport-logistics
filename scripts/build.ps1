@@ -17,7 +17,7 @@ foreach ($required in @($project, $build, $uat, $editor, (Join-Path $ProjectRoot
 }
 $projectInfo = Get-Content $project -Raw | ConvertFrom-Json
 if ($projectInfo.EngineAssociation -ne "5.6.1-CSS") {
-    throw "This source targets 5.6.1-CSS / game CL502094. Check sdk-lock.json before changing the SDK."
+    throw "This source targets 5.6.1-CSS / game CL520140. Check sdk-lock.json before changing the SDK."
 }
 $teleportLogisticsDestination = Join-Path $ProjectRoot "Mods/TeleportLogistics"
 # The clear below is recursive: refuse to run when staging resolves onto the authored plugin.

@@ -6,7 +6,7 @@ An unofficial mod for [Satisfactory](https://www.satisfactorygame.com/) by Coffe
 
 The banner is a studio render of the authored meshes, not an in-game screenshot.
 
-Built for Satisfactory **CL502094**, SML **3.12.0** and CSS Unreal **5.6.1**. Windows Steam/Epic client and Windows dedicated-server packages are the release targets.
+Built for Satisfactory **CL520140** (1.2.6), SML **3.12.1** and CSS Unreal **5.6.1**. Windows Steam/Epic client and Windows dedicated-server packages are the release targets.
 
 ## Get started
 

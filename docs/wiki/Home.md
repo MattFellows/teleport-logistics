@@ -26,4 +26,4 @@ Version history is in the [changelog](https://github.com/josh-tf/teleport-logist
 
 ## Requirements
 
-Satisfactory CL502094 with SML 3.12.0. Windows Steam and Epic clients, plus Windows dedicated servers. Linux dedicated servers and controller input are not currently certified. Install the same mod version on the host and every client.
+Satisfactory CL520140 (1.2.6) with SML 3.12.1. Windows Steam and Epic clients, plus Windows dedicated servers. Linux dedicated servers and controller input are not currently certified. Install the same mod version on the host and every client.
