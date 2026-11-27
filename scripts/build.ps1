@@ -6,7 +6,7 @@ param(
     [ValidateRange(0, 64)][int]$MaxParallelActions = 0
 )
 $ErrorActionPreference = "Stop"
-$teleporterSource = Join-Path $PSScriptRoot "../TeleportLogistics"
+$teleporterSource = Join-Path $PSScriptRoot "../TeleportLogisticsContinued"
 $project = Join-Path $ProjectRoot "FactoryGame.uproject"
 $build = Join-Path $EngineRoot "Engine/Build/BatchFiles/Build.bat"
 $uat = Join-Path $EngineRoot "Engine/Build/BatchFiles/RunUAT.bat"
@@ -19,7 +19,7 @@ $projectInfo = Get-Content $project -Raw | ConvertFrom-Json
 if ($projectInfo.EngineAssociation -ne "5.6.1-CSS") {
     throw "This source targets 5.6.1-CSS / game CL520140. Check sdk-lock.json before changing the SDK."
 }
-$teleportLogisticsDestination = Join-Path $ProjectRoot "Mods/TeleportLogistics"
+$teleportLogisticsDestination = Join-Path $ProjectRoot "Mods/TeleportLogisticsContinued"
 # The clear below is recursive: refuse to run when staging resolves onto the authored plugin.
 $sourceFull = (Resolve-Path -LiteralPath $teleporterSource).Path
 $staging = Get-Item -LiteralPath $teleportLogisticsDestination -Force -ErrorAction SilentlyContinue
@@ -30,7 +30,7 @@ if ($staging -and ($staging.FullName -eq $sourceFull -or $staging.Target -eq $so
 # into a later cook.
 if (Test-Path $teleportLogisticsDestination) { Remove-Item $teleportLogisticsDestination -Recurse -Force }
 New-Item -ItemType Directory -Force $teleportLogisticsDestination | Out-Null
-Copy-Item (Join-Path $teleporterSource "TeleportLogistics.uplugin") $teleportLogisticsDestination -Force
+Copy-Item (Join-Path $teleporterSource "TeleportLogisticsContinued.uplugin") $teleportLogisticsDestination -Force
 foreach ($folder in @("Source", "Config", "Resources")) {
     $sourcePath = Join-Path $teleporterSource $folder
     $destinationPath = Join-Path $teleportLogisticsDestination $folder
@@ -89,7 +89,7 @@ if (Test-Path $retainedContent) { Remove-Item $retainedContent -Recurse -Force }
 New-Item -ItemType Directory -Force $retainedContent | Out-Null
 Copy-Item (Join-Path $teleportLogisticsDestination "Content/*") $retainedContent -Recurse -Force
 if ($Target -eq "Editor") { return }
-$arguments = @("-ScriptsForProject=$project", "PackagePlugin", "-project=$project", "-DLCName=TeleportLogistics",
+$arguments = @("-ScriptsForProject=$project", "PackagePlugin", "-project=$project", "-DLCName=TeleportLogisticsContinued",
     "-clientconfig=Shipping", "-serverconfig=Shipping", "-utf8output", "-build", "-nocompileeditor")
 if ($MaxParallelActions -gt 0) { $arguments += "-ubtargs=-MaxParallelActions=$MaxParallelActions" }
 switch ($Target) {
@@ -101,4 +101,4 @@ switch ($Target) {
 }
 & $uat @arguments
 if ($LASTEXITCODE -ne 0) { throw "Alpakit packaging failed ($LASTEXITCODE). See the packaging output." }
-Write-Host "Packages: $(Join-Path $ProjectRoot 'Saved/ArchivedPlugins/TeleportLogistics')"
+Write-Host "Packages: $(Join-Path $ProjectRoot 'Saved/ArchivedPlugins/TeleportLogisticsContinued')"

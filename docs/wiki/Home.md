@@ -20,9 +20,9 @@ Build an input and an output, give them the same route name, connect your belts 
 
 ## Getting help
 
-Problems and suggestions go to [GitHub issues](https://github.com/josh-tf/teleport-logistics/issues). Include your Satisfactory build, SML version, whether you are on a dedicated server, and `FactoryGame.log` if the game misbehaved.
+Problems and suggestions go to [GitHub issues](https://github.com/MattFellows/teleport-logistics/issues). Include your Satisfactory build, SML version, whether you are on a dedicated server, and `FactoryGame.log` if the game misbehaved.
 
-Version history is in the [changelog](https://github.com/josh-tf/teleport-logistics/blob/main/CHANGELOG.md).
+Version history is in the [changelog](https://github.com/MattFellows/teleport-logistics/blob/main/CHANGELOG.md).
 
 ## Requirements
 

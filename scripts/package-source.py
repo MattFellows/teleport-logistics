@@ -4,8 +4,8 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import json
 
 root = Path(__file__).resolve().parents[1]
-version = json.loads((root / "TeleportLogistics" / "TeleportLogistics.uplugin").read_text())["SemVersion"]
-out = root / "dist" / f"TeleportLogistics-{version}-source.zip"
+version = json.loads((root / "TeleportLogisticsContinued" / "TeleportLogisticsContinued.uplugin").read_text())["SemVersion"]
+out = root / "dist" / f"TeleportLogisticsContinued-{version}-source.zip"
 out.parent.mkdir(exist_ok=True)
 # reports/model-renders is 42 MB of per-version PNG sheets; the dated markdown
 # records next to them are the evidence a reviewer needs.
@@ -14,7 +14,7 @@ excluded = {"Binaries", "Intermediate", "Saved", "DerivedDataCache", "__pycache_
 with ZipFile(out, "w", ZIP_DEFLATED) as archive:
     # reports and docs/publishing are untracked: they are kept locally and shipped
     # here, so a clean checkout simply has nothing to add for them.
-    for folder in ("TeleportLogistics", "scripts", "tests", "docs", "reports", "assets", "design", "tools"):
+    for folder in ("TeleportLogisticsContinued", "scripts", "tests", "docs", "reports", "assets", "design", "tools"):
         if not (root / folder).is_dir():
             continue
         for path in sorted((root / folder).rglob("*")):

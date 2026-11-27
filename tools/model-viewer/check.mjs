@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
-const version=JSON.parse(fs.readFileSync(path.join(root,'TeleportLogistics/TeleportLogistics.uplugin'),'utf8')).SemVersion;
+const version=JSON.parse(fs.readFileSync(path.join(root,'TeleportLogisticsContinued/TeleportLogisticsContinued.uplugin'),'utf8')).SemVersion;
 const reportDir=path.join(root,'reports/model-renders',version);
 fs.mkdirSync(reportDir,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || chromium.executablePath(),headless:true,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-dev-shm-usage']});

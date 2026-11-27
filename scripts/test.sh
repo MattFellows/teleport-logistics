@@ -7,7 +7,7 @@ bash -n "$teleport_logistics_root/scripts/build-linux.sh" "$teleport_logistics_r
     "$teleport_logistics_root/scripts/setup-wwise.sh" "$teleport_logistics_root/scripts/test.sh"
 "${CXX:-g++}" -std=c++20 -O1 -g -Wall -Wextra -Werror -pedantic \
     -fsanitize=address,undefined -fno-omit-frame-pointer \
-    -I"$teleport_logistics_root/TeleportLogistics/Source/TeleportLogistics/Public" \
+    -I"$teleport_logistics_root/TeleportLogisticsContinued/Source/TeleportLogisticsContinued/Public" \
     "$teleport_logistics_root/tests/transport_test.cpp" -o "$teleport_logistics_binary"
 # LeakSanitizer needs ptrace; overridable via ASAN_OPTIONS.
 # Address/undefined-behaviour instrumentation remains enabled.

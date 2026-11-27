@@ -1,9 +1,9 @@
 """A guaranteed non-emissive hub lamp material, independent of factory atlas CPD."""
 import unreal
-p='/TeleportLogistics/Models/M_TeleporterSignalOff'
+p='/TeleportLogisticsContinued/Models/M_TeleporterSignalOff'
 m=unreal.EditorAssetLibrary.load_asset(p) if unreal.EditorAssetLibrary.does_asset_exist(p) else None
 if m is None:
-    m=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_TeleporterSignalOff','/TeleportLogistics/Models',unreal.Material,unreal.MaterialFactoryNew())
+    m=unreal.AssetToolsHelpers.get_asset_tools().create_asset('M_TeleporterSignalOff','/TeleportLogisticsContinued/Models',unreal.Material,unreal.MaterialFactoryNew())
 unreal.MaterialEditingLibrary.delete_all_material_expressions(m)
 def scalar(value, prop):
     n=unreal.MaterialEditingLibrary.create_material_expression(m,unreal.MaterialExpressionConstant)

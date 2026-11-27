@@ -39,12 +39,12 @@ def verify_archive(path: Path, version: str, required: tuple[str, ...]) -> None:
         missing = set(required) - names
         if missing:
             raise SystemExit(f"{path} is missing: {', '.join(sorted(missing))}")
-        manifest = json.loads(archive.read("TeleportLogistics.uplugin"))
+        manifest = json.loads(archive.read("TeleportLogisticsContinued.uplugin"))
         if manifest.get("SemVersion") != version:
             raise SystemExit(
                 f"{path} contains TeleportLogistics {manifest.get('SemVersion')}, expected {version}"
             )
-        expected = json.loads((ROOT / "TeleportLogistics/TeleportLogistics.uplugin").read_text())
+        expected = json.loads((ROOT / "TeleportLogisticsContinued/TeleportLogisticsContinued.uplugin").read_text())
         for key in ("Version", "VersionName", "FriendlyName", "GameVersion", "Plugins", "Modules"):
             if manifest.get(key) != expected.get(key):
                 raise SystemExit(f"{path}: packaged {key} differs from source manifest")
@@ -77,10 +77,10 @@ def digest(path: Path) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    archive_dir = ROOT / ".toolchains/sml-project/Saved/ArchivedPlugins/TeleportLogistics"
-    parser.add_argument("--client", type=Path, default=archive_dir / "TeleportLogistics-Windows.zip")
+    archive_dir = ROOT / ".toolchains/sml-project/Saved/ArchivedPlugins/TeleportLogisticsContinued"
+    parser.add_argument("--client", type=Path, default=archive_dir / "TeleportLogisticsContinued-Windows.zip")
     parser.add_argument(
-        "--server", type=Path, default=archive_dir / "TeleportLogistics-WindowsServer.zip"
+        "--server", type=Path, default=archive_dir / "TeleportLogisticsContinued-WindowsServer.zip"
     )
     parser.add_argument(
         "--allow-stale",
@@ -89,7 +89,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    manifest = json.loads((ROOT / "TeleportLogistics/TeleportLogistics.uplugin").read_text())
+    manifest = json.loads((ROOT / "TeleportLogisticsContinued/TeleportLogisticsContinued.uplugin").read_text())
     version = manifest["SemVersion"]
 
     # ficsit.app rejects an upload whose integer Version is not the SemVer major, and
@@ -109,7 +109,7 @@ def main() -> None:
     ignored = {"Binaries", "Intermediate", "Saved", "__pycache__"}
     newest = max(
         path.stat().st_mtime
-        for path in (ROOT / "TeleportLogistics").rglob("*")
+        for path in (ROOT / "TeleportLogisticsContinued").rglob("*")
         if path.is_file() and not ignored.intersection(path.parts)
     )
     for source in (args.client, args.server):
@@ -119,24 +119,24 @@ def main() -> None:
                 f"or pass --allow-stale if you know the archive is current."
             )
     required_client = (
-        "TeleportLogistics.uplugin",
+        "TeleportLogisticsContinued.uplugin",
         "Resources/SFUIKIT-NOTICE.md",
         "Resources/NAMEPLATE-NOTICE.md",
         "Resources/MODELING-NOTICE.md",
         "Resources/ICONS-NOTICE.md",
-        "Binaries/Win64/FactoryGameSteam-TeleportLogistics-Win64-Shipping.dll",
-        "Binaries/Win64/FactoryGameEGS-TeleportLogistics-Win64-Shipping.dll",
+        "Binaries/Win64/FactoryGameSteam-TeleportLogisticsContinued-Win64-Shipping.dll",
+        "Binaries/Win64/FactoryGameEGS-TeleportLogisticsContinued-Win64-Shipping.dll",
         "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.pak",
         "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.utoc",
         "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.ucas",
     )
     required_server = (
-        "TeleportLogistics.uplugin",
+        "TeleportLogisticsContinued.uplugin",
         "Resources/SFUIKIT-NOTICE.md",
         "Resources/NAMEPLATE-NOTICE.md",
         "Resources/MODELING-NOTICE.md",
         "Resources/ICONS-NOTICE.md",
-        "Binaries/Win64/FactoryServer-TeleportLogistics-Win64-Shipping.dll",
+        "Binaries/Win64/FactoryServer-TeleportLogisticsContinued-Win64-Shipping.dll",
         "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.pak",
         "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.utoc",
         "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.ucas",
@@ -146,9 +146,9 @@ def main() -> None:
 
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
-    client_out = dist / f"TeleportLogistics-{version}-Windows.zip"
-    server_out = dist / f"TeleportLogistics-{version}-WindowsServer.zip"
-    merged_out = dist / f"TeleportLogistics-{version}.zip"
+    client_out = dist / f"TeleportLogisticsContinued-{version}-Windows.zip"
+    server_out = dist / f"TeleportLogisticsContinued-{version}-WindowsServer.zip"
+    merged_out = dist / f"TeleportLogisticsContinued-{version}.zip"
     shutil.copy2(args.client, client_out)
     shutil.copy2(args.server, server_out)
     write_merged(client_out, server_out, merged_out)
@@ -166,7 +166,7 @@ def main() -> None:
 
     # Hash only what this run produced. Superseded archives left in dist/ are not
     # part of the release, and package-source.py writes its zip before this runs.
-    source_out = dist / f"TeleportLogistics-{version}-source.zip"
+    source_out = dist / f"TeleportLogisticsContinued-{version}-source.zip"
     produced = [(digest(path), path) for path in (client_out, server_out, merged_out, source_out)
                 if path.is_file()]
     (dist / "SHA256SUMS").write_text(

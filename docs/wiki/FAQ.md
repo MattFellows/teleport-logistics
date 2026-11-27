@@ -72,4 +72,4 @@ Raise the **window refresh interval** under Mods in the pause menu. It controls 
 
 ## Reporting a problem
 
-[Open a GitHub issue](https://github.com/josh-tf/teleport-logistics/issues) with your Satisfactory build, SML version, whether you are on a dedicated server, what you expected, what happened, and `FactoryGame.log` if the game misbehaved.
+[Open a GitHub issue](https://github.com/MattFellows/teleport-logistics/issues) with your Satisfactory build, SML version, whether you are on a dedicated server, what you expected, what happened, and `FactoryGame.log` if the game misbehaved.

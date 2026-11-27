@@ -7,7 +7,7 @@ import math
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = ROOT / "assets" / "models"
 VENDOR = ROOT / "assets" / "vendor" / "Satisfactory_ModelingTools"
-BUILDING_SOURCE = ROOT / "TeleportLogistics" / "Source" / "TeleportLogistics" / "Private" / "TeleportLogisticsBuilding.cpp"
+BUILDING_SOURCE = ROOT / "TeleportLogisticsContinued" / "Source" / "TeleportLogisticsContinued" / "Private" / "TeleportLogisticsBuilding.cpp"
 
 
 def vertices(path):

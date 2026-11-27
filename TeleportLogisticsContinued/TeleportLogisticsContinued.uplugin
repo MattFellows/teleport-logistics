@@ -1,0 +1,32 @@
+{
+  "FileVersion": 3,
+  "Version": 0,
+  "VersionName": "0.6.0",
+  "SemVersion": "0.6.0",
+  "FriendlyName": "Teleport Logistics Continued",
+  "Description": "Continuation of Teleport Logistics by josh-tf, updated for Satisfactory 1.2.6. Teleport items, fluids and Pioneers through named networks. Loads saves made with the original mod.",
+  "CreatedBy": "MattFellows (original by josh-tf)",
+  "CreatedByURL": "https://github.com/MattFellows",
+  "DocsURL": "https://github.com/MattFellows/teleport-logistics/wiki",
+  "SupportURL": "https://github.com/MattFellows/teleport-logistics/issues",
+  "Category": "Logistics",
+  "CanContainContent": true,
+  "EnabledByDefault": true,
+  "IsBetaVersion": true,
+  "GameVersion": ">=520140",
+  "AcceptsAnyRemoteVersion": false,
+  "Modules": [
+    {
+      "Name": "TeleportLogisticsContinued",
+      "Type": "Runtime",
+      "LoadingPhase": "PostDefault"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "SML",
+      "Enabled": true,
+      "SemVersion": "^3.12.1"
+    }
+  ]
+}

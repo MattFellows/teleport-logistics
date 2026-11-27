@@ -1,4 +1,4 @@
-"""Run in the editor commandlet to validate TeleportLogistics's cooked-content defaults."""
+"""Run in the editor commandlet to validate TeleportLogisticsContinued's cooked-content defaults."""
 
 import unreal
 import json
@@ -6,11 +6,11 @@ from pathlib import Path
 
 # Fresh commandlets may still be loading yesterday's cached registry. Register
 # newly imported DLC folders before asking EditorAssetLibrary to resolve them.
-unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogistics"], True)
+unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogisticsContinued"], True)
 
 # 0.4.7's masked detail material produced a rejected DX12 depth pipeline.
 # Labels now blend their alpha into base colour on opaque printed plates.
-details = unreal.EditorAssetLibrary.load_asset("/TeleportLogistics/Models/M_TeleporterDetails")
+details = unreal.EditorAssetLibrary.load_asset("/TeleportLogisticsContinued/Models/M_TeleporterDetails")
 if details is None or details.get_editor_property("blend_mode") != unreal.BlendMode.BLEND_OPAQUE:
     raise RuntimeError("TeleportLogistics detail plates must use the opaque material hotfix")
 
@@ -21,21 +21,21 @@ def require(condition, message):
 
 
 models = ("ItemInput", "ItemOutput", "FluidInput", "FluidOutput", "Hub")
-milestone_class = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsMilestone")
+milestone_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsMilestone")
 require(milestone_class is not None, "TeleportLogistics milestone class did not load")
 unlocks = unreal.FGSchematic.get_unlocks(milestone_class)
 cost = unreal.FGSchematic.get_cost(milestone_class)
 icon = unreal.FGSchematic.get_item_icon(milestone_class)
-category_class = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsCategory")
-subcategory_class = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsSubCategory")
-representation_class = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsActorRepresentation")
+category_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsCategory")
+subcategory_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsSubCategory")
+representation_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsActorRepresentation")
 require(len(unlocks) == 1, f"Expected one recipe unlock, found {len(unlocks)}")
 recipes = unlocks[0].get_recipes_to_unlock()
 require(len(recipes) == 5, f"Expected five unlocked recipes, found {len(recipes)}")
 require(len(cost) == 3, f"Expected three milestone costs, found {len(cost)}")
 require(icon.resource_object is not None, "Milestone brush has no retained texture")
 require(icon.resource_object.get_path_name() ==
-        "/TeleportLogistics/Icons/T_TeleporterMilestone_512.T_TeleporterMilestone_512",
+        "/TeleportLogisticsContinued/Icons/T_TeleporterMilestone_512.T_TeleporterMilestone_512",
         "Milestone brush is not using the 512 px research capture")
 require(category_class is not None, "TeleportLogistics category class did not load")
 require(subcategory_class is not None, "TeleportLogistics build subcategory class did not load")
@@ -58,18 +58,18 @@ for recipe in recipes:
 
 for name in models:
     for asset_name in (f"M_Teleporter{name}", f"T_Teleporter{name}_256", f"T_Teleporter{name}_512"):
-        asset = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/Icons/{asset_name}")
+        asset = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/Icons/{asset_name}")
         require(isinstance(asset, unreal.Texture2D), f"Missing icon texture {asset_name}")
 for asset_name in ("T_TeleporterCategory_128", "T_TeleporterMilestone_256", "T_TeleporterMilestone_512"):
-    asset = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/Icons/{asset_name}")
+    asset = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/Icons/{asset_name}")
     require(isinstance(asset, unreal.Texture2D), f"Missing UI texture {asset_name}")
 
-screen = unreal.EditorAssetLibrary.load_asset("/TeleportLogistics/Models/M_TeleporterScreen")
+screen = unreal.EditorAssetLibrary.load_asset("/TeleportLogisticsContinued/Models/M_TeleporterScreen")
 require(isinstance(screen, unreal.Material), "Missing generated power-aware screen material")
-screen_grid = unreal.EditorAssetLibrary.load_asset("/TeleportLogistics/Textures/T_TeleporterScreen_Grid")
+screen_grid = unreal.EditorAssetLibrary.load_asset("/TeleportLogisticsContinued/Textures/T_TeleporterScreen_Grid")
 require(isinstance(screen_grid, unreal.Texture2D), "Missing screen grid texture")
 no_power_signal = unreal.EditorAssetLibrary.load_asset(
-    "/TeleportLogistics/Models/M_TeleporterSignalOff")
+    "/TeleportLogisticsContinued/Models/M_TeleporterSignalOff")
 require(no_power_signal is not None,
         "Missing explicit zero-emission material used to darken the Teleporter Hub")
 
@@ -77,13 +77,13 @@ require(no_power_signal is not None,
 # tiling can differ from every base-game building. Its parent is asserted below,
 # which is the property that actually matters: inheriting the stock parameter
 # interface is what keeps Customizer paint and the build effect working.
-FACTORY_MATERIAL = "/TeleportLogistics/Models/MI_TeleporterFactory.MI_TeleporterFactory"
+FACTORY_MATERIAL = "/TeleportLogisticsContinued/Models/MI_TeleporterFactory.MI_TeleporterFactory"
 FACTORY_PARENT = "/Game/FactoryGame/-Shared/Material/MI_Factory_Base_01.MI_Factory_Base_01"
 material_paths = {
-    "decal_custom": "/TeleportLogistics/Models/M_TeleporterDetails.M_TeleporterDetails",
+    "decal_custom": "/TeleportLogisticsContinued/Models/M_TeleporterDetails.M_TeleporterDetails",
     "factory": FACTORY_MATERIAL,
     "signal": FACTORY_MATERIAL,
-    "screen": "/TeleportLogistics/Models/M_TeleporterScreen.M_TeleporterScreen",
+    "screen": "/TeleportLogisticsContinued/Models/M_TeleporterScreen.M_TeleporterScreen",
     "decal_color": ("/Game/FactoryGame/Buildable/-Shared/Material/"
                     "DecalColor_Masked.DecalColor_Masked"),
     "decal_normal": ("/Game/FactoryGame/Buildable/-Shared/Material/"
@@ -97,7 +97,7 @@ expected_slots = {
     "Hub": {"decal_custom", "factory", "signal", "screen"},
 }
 for model_name in models:
-    mesh = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/Models/SM_Teleporter{model_name}")
+    mesh = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/Models/SM_Teleporter{model_name}")
     require(isinstance(mesh, unreal.StaticMesh), f"Missing static mesh SM_Teleporter{model_name}")
     require(mesh.get_num_lods() == 3,
             f"SM_Teleporter{model_name} should contain three authored LODs")
@@ -120,11 +120,11 @@ for model_name in models:
             require(parent is not None and parent.get_path_name() == FACTORY_PARENT,
                     f"{FACTORY_MATERIAL} must inherit {FACTORY_PARENT}, got "
                     f"{parent.get_path_name() if parent else 'None'}")
-    building_class = unreal.load_class(None, f"/Script/TeleportLogistics.TeleportLogistics{model_name}")
+    building_class = unreal.load_class(None, f"/Script/TeleportLogisticsContinued.TeleportLogistics{model_name}")
     require(building_class is not None, f"Missing building class TeleportLogistics{model_name}")
     building_default = unreal.get_default_object(building_class)
     require(building_default.get_interact_widget_class() ==
-            unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsWidget"),
+            unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsWidget"),
             f"TeleportLogistics{model_name} has no native TeleportLogistics interaction widget")
     if model_name == "Hub":
         power = building_default.get_editor_property("power")
@@ -140,7 +140,7 @@ for model_name in models:
     map_material = building_default.get_actor_representation_compass_material()
     require(isinstance(map_material, unreal.MaterialInstanceConstant),
             f"TeleportLogistics{model_name} is missing its map material")
-    require(map_material.get_path_name() == f"/TeleportLogistics/Icons/MI_TeleporterMap{model_name}.MI_TeleporterMap{model_name}",
+    require(map_material.get_path_name() == f"/TeleportLogisticsContinued/Icons/MI_TeleporterMap{model_name}.MI_TeleporterMap{model_name}",
             f"TeleportLogistics{model_name} uses the wrong map material")
     require(map_material.get_editor_property("parent").get_name() == "MI_CompassIcon_Static",
             f"TeleportLogistics{model_name} does not use the native static map material")
@@ -148,12 +148,12 @@ for model_name in models:
     require(len(parameters) == 1 and str(parameters[0].parameter_info.name) == "Icon"
             and parameters[0].parameter_value == map_icon,
             f"TeleportLogistics{model_name} map material does not bind its sidebar texture")
-    require(map_icon.get_path_name() == f"/TeleportLogistics/Icons/M_Teleporter{model_name}.M_Teleporter{model_name}",
+    require(map_icon.get_path_name() == f"/TeleportLogisticsContinued/Icons/M_Teleporter{model_name}.M_Teleporter{model_name}",
             f"TeleportLogistics{model_name} CDO uses the wrong map icon: {map_icon.get_path_name()}")
 
 for old_name in ("Primary", "Secondary", "Shell", "Steel", "Frame", "Rubber",
                  "Input", "Output", "Glow", "Warning"):
-    require(not unreal.EditorAssetLibrary.does_asset_exist(f"/TeleportLogistics/Models/M_Teleporter{old_name}"),
+    require(not unreal.EditorAssetLibrary.does_asset_exist(f"/TeleportLogisticsContinued/Models/M_Teleporter{old_name}"),
             f"Legacy material M_Teleporter{old_name} survived clean import")
 
 unreal.log(
@@ -163,16 +163,16 @@ unreal.log(
 )
 
 for name in ("Plate", "Well", "Meter"):
-    texture = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/UI/T_TeleporterUI_{name}")
+    texture = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/UI/T_TeleporterUI_{name}")
     require(isinstance(texture, unreal.Texture2D), f"Missing SFUIKIT panel {name}")
     require(texture.get_editor_property("lod_group") == unreal.TextureGroup.TEXTUREGROUP_UI,
             f"SFUIKIT panel {name} is not in the UI texture group")
 for name in ("ItemInput", "ItemOutput", "FluidInput", "FluidOutput"):
-    cdo = unreal.get_default_object(unreal.load_class(None, f"/Script/TeleportLogistics.TeleportLogistics{name}"))
+    cdo = unreal.get_default_object(unreal.load_class(None, f"/Script/TeleportLogisticsContinued.TeleportLogistics{name}"))
     require(not cdo.get_editor_property("mIsTickRateManaged"), f"{name} still uses idle tick throttling")
 
 # Personnel travel is a separate Tier 9 unlock; logistics rewards stay unchanged.
-travel = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsTravelMilestone")
+travel = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsTravelMilestone")
 require(travel is not None and unreal.FGSchematic.get_tech_tier(travel) == 9, "Personnel milestone must be Tier 9")
 travel_cost = unreal.FGSchematic.get_cost(travel)
 require([x.amount for x in travel_cost] == [200, 100, 50], "Personnel HUB resource costs changed")
@@ -181,8 +181,8 @@ travel_rewards = unreal.FGSchematic.get_unlocks(travel)[0].get_recipes_to_unlock
 require(len(travel_rewards) == 1, "Personnel milestone must unlock one build recipe")
 require([x.amount for x in unreal.FGRecipe.get_ingredients(None, travel_rewards[0])] == [20, 10, 5], "Personnel construction costs changed")
 for size in (256, 512):
-    require(unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/Icons/T_TeleporterTravelHub_{size}") is not None, "Missing Personnel capture")
-mesh = unreal.EditorAssetLibrary.load_asset("/TeleportLogistics/Models/SM_TeleporterTravelHub")
+    require(unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/Icons/T_TeleporterTravelHub_{size}") is not None, "Missing Personnel capture")
+mesh = unreal.EditorAssetLibrary.load_asset("/TeleportLogisticsContinued/Models/SM_TeleporterTravelHub")
 require(mesh is not None and mesh.get_num_lods() == 3, "Personnel model needs three LODs")
 require(len(mesh.get_editor_property("body_setup").get_editor_property("agg_geom").get_editor_property("box_elems")) == 7, "Personnel landing/sign collision missing")
 for slot in mesh.get_editor_property("static_materials"):
@@ -190,9 +190,9 @@ for slot in mesh.get_editor_property("static_materials"):
     require(slot.get_editor_property("material_interface").get_path_name() == material_paths[key], "Wrong Personnel material: " + key)
 unreal.log("Personnel content valid: Tier 9, 200/100/50 unlock, 20/10/5 construction, three LODs, seven collision boxes and retained icons.")
 
-travel_class = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsTravelHub")
+travel_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsTravelHub")
 travel_default = unreal.get_default_object(travel_class)
-require(travel_default.get_interact_widget_class() == unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsTravelWidget"), "Personnel E interaction has the wrong widget")
+require(travel_default.get_interact_widget_class() == unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsTravelWidget"), "Personnel E interaction has the wrong widget")
 travel_power = travel_default.get_component_by_class(unreal.FGPowerConnectionComponent).get_editor_property("relative_location")
 require((travel_power.x, travel_power.y, travel_power.z) == (-180.0, 220.0, 310.0), "Personnel power socket misses its mast cap")
 require(travel_default.get_actor_representation_compass_material() is not None, "Personnel map material missing")
@@ -202,18 +202,18 @@ unreal.log("Personnel interaction, mast contact, map material and milestone icon
 
 # Native CDO creation must not construct the stock Blueprint reward object.
 for name, expected in (("TeleportLogisticsMilestone", "TeleportLogisticsUnlock"), ("TeleportLogisticsTravelMilestone", "TeleportLogisticsTravelUnlock")):
-    rewards = unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogistics." + name))
-    require(len(rewards) == 1 and rewards[0].get_class().get_path_name() == "/Script/TeleportLogistics." + expected,
+    rewards = unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogisticsContinued." + name))
+    require(len(rewards) == 1 and rewards[0].get_class().get_path_name() == "/Script/TeleportLogisticsContinued." + expected,
             name + " loaded Blueprint presentation during native construction")
 unreal.TeleportLogisticsGameInstanceModule.prepare_reward_presentation()
 # Force collection before reading the replaced objects; CDO runtime references
 # alone are insufficient in retail builds with disregard-for-GC enabled.
 unreal.SystemLibrary.collect_garbage()
-first_rewards = [unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogistics." + n))[0]
+first_rewards = [unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogisticsContinued." + n))[0]
                  for n in ("TeleportLogisticsMilestone", "TeleportLogisticsTravelMilestone")]
 unreal.TeleportLogisticsGameInstanceModule.prepare_reward_presentation()
 for n, first in zip(("TeleportLogisticsMilestone", "TeleportLogisticsTravelMilestone"), first_rewards):
-    require(unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogistics." + n))[0] == first,
+    require(unreal.FGSchematic.get_unlocks(unreal.load_class(None, "/Script/TeleportLogisticsContinued." + n))[0] == first,
             "Repeated presentation initialization replaced " + n)
 require(len(first_rewards[0].get_recipes_to_unlock()) == 5 and len(first_rewards[1].get_recipes_to_unlock()) == 1,
         "Presentation replacement lost recipe rewards")
@@ -222,7 +222,7 @@ require(len(first_rewards[0].get_recipes_to_unlock()) == 5 and len(first_rewards
 reward_interface = unreal.load_class(None, "/Game/FactoryGame/Unlocks/BPI_UnlockableInterface.BPI_UnlockableInterface_C")
 require(reward_interface is not None, "Stock reward interface missing")
 for milestone_name in ("TeleportLogisticsMilestone", "TeleportLogisticsTravelMilestone"):
-    milestone_class = unreal.load_class(None, "/Script/TeleportLogistics." + milestone_name)
+    milestone_class = unreal.load_class(None, "/Script/TeleportLogisticsContinued." + milestone_name)
     for unlock in unreal.FGSchematic.get_unlocks(milestone_class):
         require(unreal.SystemLibrary.does_implement_interface(unlock, reward_interface),
                 milestone_name + " cannot supply native reward widgets")
@@ -236,21 +236,21 @@ def amounts(entries):
     require(len({x.item_class.get_name() for x in entries}) == len(entries), "Duplicate cost resource")
     return {x.item_class.get_name(): x.amount for x in entries}
 require(unreal.FGSchematic.get_tech_tier(milestone_class) in (5, 9), "Unexpected research tier")
-logistics = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogisticsMilestone")
+logistics = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogisticsMilestone")
 require(unreal.FGSchematic.get_tech_tier(logistics) == 5, "Logistics must remain Tier 5")
 require(amounts(unreal.FGSchematic.get_cost(logistics)) == {
     "Desc_CircuitBoard_C": 100, "Desc_IronPlateReinforced_C": 100, "Desc_Cable_C": 200}, "Logistics unlock costs differ")
 require(amounts(unreal.FGSchematic.get_cost(travel)) == {
     "Desc_TimeCrystal_C": 200, "Desc_ComputerSuper_C": 100, "Desc_MotorLightweight_C": 50}, "Personnel unlock costs differ")
 for kind in ("ItemInput", "ItemOutput", "FluidInput", "FluidOutput", "Hub", "Travel"):
-    recipe = unreal.load_class(None, "/Script/TeleportLogistics.TeleportLogistics" + kind + "Recipe")
+    recipe = unreal.load_class(None, "/Script/TeleportLogisticsContinued.TeleportLogistics" + kind + "Recipe")
     product = unreal.FGRecipe.get_products(recipe)
     require(len(product) == 1 and product[0].amount == 1, kind + " must produce exactly one building")
-    require(product[0].item_class.get_path_name() == "/Script/TeleportLogistics.TeleportLogistics" + kind + "Descriptor", kind + " product mismatch")
+    require(product[0].item_class.get_path_name() == "/Script/TeleportLogisticsContinued.TeleportLogistics" + kind + "Descriptor", kind + " product mismatch")
     # SDK GetBuildableClass is a reconstructed stub; inspect the stored class instead.
     building = unreal.get_default_object(product[0].item_class).get_editor_property("mBuildableClass")
     expected_building = "TeleportLogisticsTravelHub" if kind == "Travel" else "TeleportLogistics" + kind
-    require(building is not None and building.get_path_name() == "/Script/TeleportLogistics." + expected_building, kind + " buildable mismatch")
+    require(building is not None and building.get_path_name() == "/Script/TeleportLogisticsContinued." + expected_building, kind + " buildable mismatch")
     require(unreal.get_default_object(building).get_editor_property("mHologramClass") is not None, kind + " lacks a hologram")
     expected = {"Desc_IronPlateReinforced_C": 4, "Desc_CircuitBoard_C": 4, "Desc_Cable_C": 10}
     if kind == "Hub": expected["Desc_Computer_C"] = 5
@@ -260,7 +260,7 @@ unreal.log("Research contract passed: exact tiers, cost resources, quantities, p
 
 # Milestone symbols are distinct from the individual 3D building reward images.
 for class_name, icon_name in (("TeleportLogisticsMilestone", "Milestone"), ("TeleportLogisticsTravelMilestone", "PersonnelMilestone")):
-    cls = unreal.load_class(None, "/Script/TeleportLogistics." + class_name)
+    cls = unreal.load_class(None, "/Script/TeleportLogisticsContinued." + class_name)
     icon = unreal.FGSchematic.get_item_icon(cls).resource_object
     require(icon is not None and icon.get_name() == "T_Teleporter" + icon_name + "_512", class_name + " uses the wrong milestone icon")
 unreal.log("Milestone tile symbols use separate retained textures from building rewards.")

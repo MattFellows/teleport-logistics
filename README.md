@@ -1,8 +1,12 @@
-# Teleport Logistics
+# Teleport Logistics Continued
+
+A continuation of [Teleport Logistics](https://github.com/josh-tf/teleport-logistics) by Josh Bowden (josh-tf), kept working on current Satisfactory builds while the original is not updated. All design, models and code are Josh's work under the MIT licence; this fork adds the fixes for Satisfactory 1.2.6 (CL520140).
+
+**Switching from the original mod:** remove Teleport Logistics and install Teleport Logistics Continued. Existing saves load with their teleporters, hubs and routes intact. Don't install both together. Mod settings start from their defaults again.
 
 ![Teleport Logistics](docs/media/banner.png)
 
-An unofficial mod for [Satisfactory](https://www.satisfactorygame.com/) by Coffee Stain Studios, built on [SML](https://ficsit.app/). Teleport items, fluids and Pioneers between distant parts of your factory. Use named routes for logistics and a destination directory for personal travel. Get it on [ficsit.app](https://ficsit.app/mod/TeleportLogistics).
+An unofficial mod for [Satisfactory](https://www.satisfactorygame.com/) by Coffee Stain Studios, built on [SML](https://ficsit.app/). Teleport items, fluids and Pioneers between distant parts of your factory. Use named routes for logistics and a destination directory for personal travel. Get it on [ficsit.app](https://ficsit.app/mod/TeleportLogisticsContinued).
 
 The banner is a studio render of the authored meshes, not an in-game screenshot.
 
@@ -40,7 +44,7 @@ Each logistics endpoint costs 4 Reinforced Iron Plates, 4 Circuit Boards and 10 
 
 ## Installation and compatibility
 
-Use matching versions on host and clients. Install the current release from [ficsit.app](https://ficsit.app/mod/TeleportLogistics) or the [GitHub releases](https://github.com/josh-tf/teleport-logistics/releases/latest). Local builds land in `dist/` as `TeleportLogistics-<version>-Windows.zip` for the client and `-WindowsServer.zip` for a dedicated server; `TeleportLogistics-<version>.zip` combines both platforms for SMR. Source archives and the model viewer are not installable mods.
+Use matching versions on host and clients. Install the current release from [ficsit.app](https://ficsit.app/mod/TeleportLogisticsContinued) or the [GitHub releases](https://github.com/MattFellows/teleport-logistics/releases/latest). Local builds land in `dist/` as `TeleportLogisticsContinued-<version>-Windows.zip` for the client and `-WindowsServer.zip` for a dedicated server; `TeleportLogisticsContinued-<version>.zip` combines both platforms for SMR. Source archives and the model viewer are not installable mods.
 
 Keep a backup of any save you test with. Linux dedicated servers, controller navigation and large multiplayer factories are not certified by the current release checks.
 

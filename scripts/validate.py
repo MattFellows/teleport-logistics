@@ -9,21 +9,21 @@ from PIL import Image
 
 
 root = Path(__file__).resolve().parents[1]
-plugin = root / "TeleportLogistics"
-manifest = json.loads((plugin / "TeleportLogistics.uplugin").read_text())
-assert manifest["Modules"][0]["Name"] == "TeleportLogistics"
+plugin = root / "TeleportLogisticsContinued"
+manifest = json.loads((plugin / "TeleportLogisticsContinued.uplugin").read_text())
+assert manifest["Modules"][0]["Name"] == "TeleportLogisticsContinued"
 assert manifest["Plugins"][0]["Name"] == "SML"
 assert manifest["AcceptsAnyRemoteVersion"] is False
 
-building_header = (plugin / "Source/TeleportLogistics/Public/TeleportLogisticsBuilding.h").read_text()
-building_source = (plugin / "Source/TeleportLogistics/Private/TeleportLogisticsBuilding.cpp").read_text()
-subsystem_source = (plugin / "Source/TeleportLogistics/Private/TeleportLogisticsSubsystem.cpp").read_text()
-remote_header = (plugin / "Source/TeleportLogistics/Public/TeleportLogisticsRemoteCall.h").read_text()
-remote_source = (plugin / "Source/TeleportLogistics/Private/TeleportLogisticsRemoteCall.cpp").read_text()
-types_header = (plugin / "Source/TeleportLogistics/Public/TeleportLogisticsTypes.h").read_text()
-widget_source = (plugin / "Source/TeleportLogistics/Private/TeleportLogisticsWidget.cpp").read_text()
-content_header = (plugin / "Source/TeleportLogistics/Public/TeleportLogisticsContent.h").read_text()
-content_source = (plugin / "Source/TeleportLogistics/Private/TeleportLogisticsContent.cpp").read_text()
+building_header = (plugin / "Source/TeleportLogisticsContinued/Public/TeleportLogisticsBuilding.h").read_text()
+building_source = (plugin / "Source/TeleportLogisticsContinued/Private/TeleportLogisticsBuilding.cpp").read_text()
+subsystem_source = (plugin / "Source/TeleportLogisticsContinued/Private/TeleportLogisticsSubsystem.cpp").read_text()
+remote_header = (plugin / "Source/TeleportLogisticsContinued/Public/TeleportLogisticsRemoteCall.h").read_text()
+remote_source = (plugin / "Source/TeleportLogisticsContinued/Private/TeleportLogisticsRemoteCall.cpp").read_text()
+types_header = (plugin / "Source/TeleportLogisticsContinued/Public/TeleportLogisticsTypes.h").read_text()
+widget_source = (plugin / "Source/TeleportLogisticsContinued/Private/TeleportLogisticsWidget.cpp").read_text()
+content_header = (plugin / "Source/TeleportLogisticsContinued/Public/TeleportLogisticsContent.h").read_text()
+content_source = (plugin / "Source/TeleportLogisticsContinued/Private/TeleportLogisticsContent.cpp").read_text()
 linux_build = (root / "scripts/build-linux.sh").read_text()
 
 for token in (
@@ -44,7 +44,7 @@ for token in (
     assert token in building_header or token in building_source, token
 assert "DOREPLIFETIME(ATeleportLogisticsEndpoint, RoutePath)" in building_source, \
     "the look-at route text must replicate; the panel is built client-side"
-assert "Endpoint->RoutePath = Path" in (root / "TeleportLogistics/Source/TeleportLogistics/Private"
+assert "Endpoint->RoutePath = Path" in (root / "TeleportLogisticsContinued/Source/TeleportLogisticsContinued/Private"
                                         "/TeleportLogisticsSubsystem.cpp").read_text(), \
     "RefreshMap must feed the replicated route text"
 assert "CreateAndAddNewRepresentation" in building_source
@@ -89,13 +89,13 @@ assert "IsRunningDedicatedServer()" in widget_source
 # build-linux.sh empties the repo plugin's Content during staging and refills it
 # from the staged copy. Without that copy back, a build leaves the retained
 # packages checked at the end of this file deleted.
-assert re.search(r'cp -a\s+"?\$destination/Content[^"]*"?\s+"?\S*TeleportLogistics/Content',
+assert re.search(r'cp -a\s+"?\$destination/Content[^"]*"?\s+"?\S*TeleportLogisticsContinued/Content',
                  linux_build), "build-linux.sh must copy staged Content back into the repo plugin"
 
 # build.ps1 is not exercised on this host, so check it still targets the current plugin.
 # A rename that misses the PowerShell entry point is the failure this catches.
 windows_build = (root / "scripts/build.ps1").read_text()
-for token in ("-DLCName=TeleportLogistics", "Mods/TeleportLogistics"):
+for token in ("-DLCName=TeleportLogisticsContinued", "Mods/TeleportLogisticsContinued"):
     assert token in windows_build, f"build.ps1 must target the current plugin: {token}"
 
 native_class_count = 0
@@ -104,7 +104,7 @@ for path in (plugin / "Source").rglob("*.h"):
     includes = re.findall(r'#include "([^"]+)"', text)
     if "GENERATED_BODY" in text:
         assert includes[-1] == path.stem + ".generated.h", path
-        native_class_count += len(re.findall(r"\bclass\s+TELEPORTLOGISTICS_API\s+(\w+)\s*:", text))
+        native_class_count += len(re.findall(r"\bclass\s+TELEPORTLOGISTICSCONTINUED_API\s+(\w+)\s*:", text))
 for path in (plugin / "Source").rglob("*.cpp"):
     text = path.read_text()
     assert "TODO" not in text, path
@@ -209,7 +209,7 @@ for asset_type, names in expected_packages.items():
     assert actual == set(names), (asset_type, sorted(actual - set(names)),
                                   sorted(set(names) - actual))
 
-manifest = json.loads((plugin / "TeleportLogistics.uplugin").read_text())
+manifest = json.loads((plugin / "TeleportLogisticsContinued.uplugin").read_text())
 # SMR validates a multi-target plugin by comparing these: "SemVer major version
 # should match Version". SML itself ships Version 3 against SemVersion 3.12.0.
 assert manifest["Version"] == int(manifest["SemVersion"].split(".")[0]), (

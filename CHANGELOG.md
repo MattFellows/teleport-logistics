@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 (Teleport Logistics Continued)
+
+- Published as Teleport Logistics Continued, a continuation of josh-tf's Teleport Logistics. The mod reference is now `TeleportLogisticsContinued`; saves made with the original mod load with their buildings and routes, because the old `/Script/TeleportLogistics` names are redirected to the new module.
+- Runs on Satisfactory 1.2.6 (CL520140) with SML 3.12.1. Loading a save no longer crashes in the hub's power setup, and the look-at highlight and E interaction work again on every teleporter.
+- Mod settings are stored under the new mod reference, so they start from their defaults.
+
 ## 0.5.12
 
 - Buildings no longer snap themselves onto the sign areas of other machines while being placed. The rear sign pads were built on the placement hologram as well as the building, and exist for wall signs to attach to.

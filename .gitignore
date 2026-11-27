@@ -1,7 +1,7 @@
-TeleportLogistics/Binaries/
-TeleportLogistics/Intermediate/
-TeleportLogistics/Saved/
-TeleportLogistics/DerivedDataCache/
+TeleportLogisticsContinued/Binaries/
+TeleportLogisticsContinued/Intermediate/
+TeleportLogisticsContinued/Saved/
+TeleportLogisticsContinued/DerivedDataCache/
 dist/
 .DS_Store
 __pycache__/

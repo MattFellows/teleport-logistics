@@ -1,4 +1,4 @@
-"""Run inside CSS Unreal Editor to build TeleportLogistics's cookable content.
+"""Run inside CSS Unreal Editor to build TeleportLogisticsContinued's cookable content.
 
 The models deliberately use Satisfactory's native factory atlas material for
 stock shading and Customizer support. The screen and zero-emission lamp materials are authored by
@@ -36,7 +36,7 @@ def import_task(source, destination):
 
 tasks = []
 for source in sorted((root / "models").glob("*.obj")):
-    item = import_task(source, "/TeleportLogistics/Models")
+    item = import_task(source, "/TeleportLogisticsContinued/Models")
     options = unreal.FbxImportUI()
     options.import_mesh = True
     options.import_as_skeletal = False
@@ -50,9 +50,9 @@ for source in sorted((root / "models").glob("*.obj")):
     item.factory = unreal.FbxFactory()
     tasks.append(item)
 for source in sorted((root / "icons").glob("*.png")):
-    tasks.append(import_task(source, "/TeleportLogistics/Icons"))
-tasks.append(import_task(root / "textures" / "T_TeleporterScreen_Grid.png", "/TeleportLogistics/Textures"))
-tasks.append(import_task(root / "textures" / "T_TeleporterDetails.png", "/TeleportLogistics/Textures"))
+    tasks.append(import_task(source, "/TeleportLogisticsContinued/Icons"))
+tasks.append(import_task(root / "textures" / "T_TeleporterScreen_Grid.png", "/TeleportLogisticsContinued/Textures"))
+tasks.append(import_task(root / "textures" / "T_TeleporterDetails.png", "/TeleportLogisticsContinued/Textures"))
 
 expected_icons = 22
 if len(tasks) != 6 + expected_icons + 2:
@@ -63,7 +63,7 @@ if len(tasks) != 6 + expected_icons + 2:
 
 unreal.log("TeleportLogistics: importing six clean meshes, twenty-two icons, and two textures.")
 for source in sorted((root / "ui" / "generated").glob("*.png")):
-    tasks.append(import_task(source, "/TeleportLogistics/UI"))
+    tasks.append(import_task(source, "/TeleportLogisticsContinued/UI"))
 if len(tasks) != 33:
     raise RuntimeError("Expected three SFUIKIT panels; run prepare-ui-assets.py")
 tools.import_asset_tasks(tasks)
@@ -73,7 +73,7 @@ for item in tasks:
         raise RuntimeError("Asset import failed: " + expected)
     asset = unreal.EditorAssetLibrary.load_asset(expected)
     if isinstance(asset, unreal.Texture2D):
-        if item.destination_path in ("/TeleportLogistics/Icons", "/TeleportLogistics/UI"):
+        if item.destination_path in ("/TeleportLogisticsContinued/Icons", "/TeleportLogisticsContinued/UI"):
             asset.set_editor_property("lod_group", unreal.TextureGroup.TEXTUREGROUP_UI)
             asset.set_editor_property("compression_settings", unreal.TextureCompressionSettings.TC_EDITOR_ICON)
             asset.set_editor_property("mip_gen_settings", unreal.TextureMipGenSettings.TMGS_NO_MIPMAPS)
@@ -87,9 +87,9 @@ runpy.run_path(str(Path(__file__).with_name("build-power-material.py")))
 
 # Shared printed plates avoid the masked depth/shadow permutation that failed on DX12.
 runpy.run_path(str(Path(__file__).with_name("build-detail-material.py")))
-detail_material = path_asset("/TeleportLogistics/Models/M_TeleporterDetails")
+detail_material = path_asset("/TeleportLogisticsContinued/Models/M_TeleporterDetails")
 
-screen_grid = path_asset("/TeleportLogistics/Textures/T_TeleporterScreen_Grid")
+screen_grid = path_asset("/TeleportLogisticsContinued/Textures/T_TeleporterScreen_Grid")
 
 
 def expression(material, cls, x, y, **properties):
@@ -106,14 +106,14 @@ FACTORY_DETAIL_SCALE = 20.0
 
 
 def build_screen_material():
-    path = "/TeleportLogistics/Models/M_TeleporterScreen"
+    path = "/TeleportLogisticsContinued/Models/M_TeleporterScreen"
     material = None
     if unreal.EditorAssetLibrary.does_asset_exist(path):
         material = unreal.EditorAssetLibrary.load_asset(path)
     if isinstance(material, unreal.Material):
         unreal.MaterialEditingLibrary.delete_all_material_expressions(material)
     else:
-        material = tools.create_asset("M_TeleporterScreen", "/TeleportLogistics/Models", unreal.Material,
+        material = tools.create_asset("M_TeleporterScreen", "/TeleportLogisticsContinued/Models", unreal.Material,
                                       unreal.MaterialFactoryNew())
     if not isinstance(material, unreal.Material):
         raise RuntimeError("Could not create " + path)
@@ -171,11 +171,11 @@ def build_factory_material():
     so the wear reads slightly larger.
     """
     parent = path_asset("/Game/FactoryGame/-Shared/Material/MI_Factory_Base_01.MI_Factory_Base_01")
-    path = "/TeleportLogistics/Models/MI_TeleporterFactory"
+    path = "/TeleportLogisticsContinued/Models/MI_TeleporterFactory"
     instance = (unreal.EditorAssetLibrary.load_asset(path)
                 if unreal.EditorAssetLibrary.does_asset_exist(path) else None)
     if not isinstance(instance, unreal.MaterialInstanceConstant):
-        instance = tools.create_asset("MI_TeleporterFactory", "/TeleportLogistics/Models",
+        instance = tools.create_asset("MI_TeleporterFactory", "/TeleportLogisticsContinued/Models",
                                       unreal.MaterialInstanceConstant,
                                       unreal.MaterialInstanceConstantFactoryNew())
     if not isinstance(instance, unreal.MaterialInstanceConstant):
@@ -204,7 +204,7 @@ materials = {
 }
 
 for model_name in models:
-    path = "/TeleportLogistics/Models/SM_Teleporter" + model_name
+    path = "/TeleportLogisticsContinued/Models/SM_Teleporter" + model_name
     mesh = unreal.EditorAssetLibrary.load_asset(path)
     if not isinstance(mesh, unreal.StaticMesh):
         raise RuntimeError("Missing TeleportLogistics static mesh: " + path)
@@ -241,7 +241,7 @@ for model_name in models:
         raise RuntimeError("Failed setting LOD screen sizes")
     unreal.EditorAssetLibrary.save_loaded_asset(mesh)
 
-unreal.EditorAssetLibrary.save_directory("/TeleportLogistics", only_if_is_dirty=False, recursive=True)
+unreal.EditorAssetLibrary.save_directory("/TeleportLogisticsContinued", only_if_is_dirty=False, recursive=True)
 unreal.log(
     "TeleportLogistics: six stock-scale three-LOD meshes, native factory/decal materials, "
     "one power-aware screen material, and twenty-two native-style icons imported."

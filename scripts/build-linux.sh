@@ -38,18 +38,18 @@ if [[ "$target" == Windows* || "$target" == All ]]; then
         exit 1
     }
 fi
-destination="$project_root/Mods/TeleportLogistics"
-[[ "$(realpath -m "$destination")" != "$(realpath "$teleport_logistics_root/TeleportLogistics")" ]] || { echo "Project staging must not be the source plugin." >&2; exit 1; }
+destination="$project_root/Mods/TeleportLogisticsContinued"
+[[ "$(realpath -m "$destination")" != "$(realpath "$teleport_logistics_root/TeleportLogisticsContinued")" ]] || { echo "Project staging must not be the source plugin." >&2; exit 1; }
 # This directory is a generated staging copy. Clear it so removed or renamed
 # content cannot leak into a later cook.
 rm -rf "$destination"
 mkdir -p "$destination"
-cp "$teleport_logistics_root/TeleportLogistics/TeleportLogistics.uplugin" "$destination/"
+cp "$teleport_logistics_root/TeleportLogisticsContinued/TeleportLogisticsContinued.uplugin" "$destination/"
 for folder in Source Config Resources; do
     mkdir -p "$destination/$folder"
-    cp -a "$teleport_logistics_root/TeleportLogistics/$folder/." "$destination/$folder/"
+    cp -a "$teleport_logistics_root/TeleportLogisticsContinued/$folder/." "$destination/$folder/"
 done
-# TeleportLogistics's cooked content is entirely generated from the checked-in OBJ and PNG
+# TeleportLogisticsContinued's cooked content is entirely generated from the checked-in OBJ and PNG
 # sources. Start each import with an empty package directory so Unreal never has
 # to force-delete referenced StaticMesh packages (a crash-prone UE 5.6 path),
 # and so stale materials or LODs cannot leak into a release.
@@ -80,11 +80,11 @@ done
 [[ -f "$destination/Content/Textures/T_TeleporterScreen_Grid.uasset" ]] || { echo "Missing generated screen texture" >&2; exit 1; }
 # Retain the successfully imported packages in the source tree used by source
 # archives and future clean staging builds.
-rm -rf "$teleport_logistics_root/TeleportLogistics/Content"
-mkdir -p "$teleport_logistics_root/TeleportLogistics/Content"
-cp -a "$destination/Content/." "$teleport_logistics_root/TeleportLogistics/Content/"
+rm -rf "$teleport_logistics_root/TeleportLogisticsContinued/Content"
+mkdir -p "$teleport_logistics_root/TeleportLogisticsContinued/Content"
+cp -a "$destination/Content/." "$teleport_logistics_root/TeleportLogisticsContinued/Content/"
 [[ "$target" != Editor ]] || exit 0
-args=("-ScriptsForProject=$project" PackagePlugin "-project=$project" -DLCName=TeleportLogistics
+args=("-ScriptsForProject=$project" PackagePlugin "-project=$project" -DLCName=TeleportLogisticsContinued
     -clientconfig=Shipping -serverconfig=Shipping -utf8output -build -nocompileeditor)
 if [[ -n "${TELEPORTLOGISTICS_MAX_PARALLEL_ACTIONS:-}" ]]; then
     args+=("-ubtargs=-MaxParallelActions=$TELEPORTLOGISTICS_MAX_PARALLEL_ACTIONS")
@@ -97,4 +97,4 @@ case "$target" in
     All) args+=(-platform=Win64 -server -serverplatform=Win64+Linux -merge);;
 esac
 bash "$uat" "${args[@]}"
-echo "Packages: $project_root/Saved/ArchivedPlugins/TeleportLogistics"
+echo "Packages: $project_root/Saved/ArchivedPlugins/TeleportLogisticsContinued"

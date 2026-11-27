@@ -28,7 +28,7 @@ class ReleaseArchiveTests(unittest.TestCase):
                     release.safe_files(z)
 
     def test_normal_package(self):
-        self.check_names(['TeleportLogistics.uplugin', 'Content/Paks/Windows/TeleportLogistics.ucas'], valid=True)
+        self.check_names(['TeleportLogisticsContinued.uplugin', 'Content/Paks/Windows/TeleportLogisticsContinued.ucas'], valid=True)
 
     def test_traversal_and_windows_paths(self):
         for name in ('../outside', '/absolute', 'C:/outside', r'Content\..\outside'):
@@ -36,29 +36,29 @@ class ReleaseArchiveTests(unittest.TestCase):
                 self.check_names([name])
 
     def test_case_collisions(self):
-        self.check_names(['TeleportLogistics.uplugin', 'teleportlogistics.uplugin'])
+        self.check_names(['TeleportLogisticsContinued.uplugin', 'teleportlogisticscontinued.uplugin'])
 
     def test_manifest_identity_must_match_source(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            (root / 'TeleportLogistics').mkdir()
+            (root / 'TeleportLogisticsContinued').mkdir()
             expected = {'SemVersion': '0.5.9', 'Version': 29, 'VersionName': '0.5.9',
-                        'FriendlyName': 'TeleportLogistics', 'GameVersion': '>=502094',
-                        'Plugins': [{'Name': 'SML'}], 'Modules': [{'Name': 'TeleportLogistics'}]}
-            (root / 'TeleportLogistics/TeleportLogistics.uplugin').write_text(json.dumps(expected))
+                        'FriendlyName': 'TeleportLogisticsContinued', 'GameVersion': '>=502094',
+                        'Plugins': [{'Name': 'SML'}], 'Modules': [{'Name': 'TeleportLogisticsContinued'}]}
+            (root / 'TeleportLogisticsContinued/TeleportLogisticsContinued.uplugin').write_text(json.dumps(expected))
             archive = root / 'release.zip'
             def write(manifest):
                 with ZipFile(archive, 'w') as z:
-                    z.writestr('TeleportLogistics.uplugin', json.dumps(manifest))
+                    z.writestr('TeleportLogisticsContinued.uplugin', json.dumps(manifest))
             with patch.object(release, 'ROOT', root):
                 write(expected)
-                release.verify_archive(archive, '0.5.9', ('TeleportLogistics.uplugin',))
+                release.verify_archive(archive, '0.5.9', ('TeleportLogisticsContinued.uplugin',))
                 for key in ('SemVersion', 'Version', 'VersionName', 'FriendlyName', 'GameVersion',
                             'Plugins', 'Modules'):
                     with self.subTest(key=key):
                         write({**expected, key: 'stale'})
                         with self.assertRaises(SystemExit):
-                            release.verify_archive(archive, '0.5.9', ('TeleportLogistics.uplugin',))
+                            release.verify_archive(archive, '0.5.9', ('TeleportLogisticsContinued.uplugin',))
                 write(expected)
                 with self.assertRaises(SystemExit):
                     release.verify_archive(archive, '0.5.9', ('missing.dll',))

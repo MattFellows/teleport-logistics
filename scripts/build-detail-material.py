@@ -5,16 +5,16 @@ geometry. This deliberately trades transparent margins for a stable opaque pass.
 """
 import unreal
 
-unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogistics"], True)
-path = "/TeleportLogistics/Models/M_TeleporterDetails"
+unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogisticsContinued"], True)
+path = "/TeleportLogisticsContinued/Models/M_TeleporterDetails"
 material = (unreal.EditorAssetLibrary.load_asset(path)
             if unreal.EditorAssetLibrary.does_asset_exist(path) else None)
 if material is None:
     material = unreal.AssetToolsHelpers.get_asset_tools().create_asset(
-        "M_TeleporterDetails", "/TeleportLogistics/Models", unreal.Material, unreal.MaterialFactoryNew())
+        "M_TeleporterDetails", "/TeleportLogisticsContinued/Models", unreal.Material, unreal.MaterialFactoryNew())
 unreal.MaterialEditingLibrary.delete_all_material_expressions(material)
 material.set_editor_property("blend_mode", unreal.BlendMode.BLEND_OPAQUE)
-details = unreal.EditorAssetLibrary.load_asset("/TeleportLogistics/Textures/T_TeleporterDetails")
+details = unreal.EditorAssetLibrary.load_asset("/TeleportLogisticsContinued/Textures/T_TeleporterDetails")
 assert details is not None
 details.set_editor_property("srgb", True)
 details.set_editor_property("address_x", unreal.TextureAddress.TA_CLAMP)

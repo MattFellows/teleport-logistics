@@ -1,4 +1,4 @@
-"""Generate TeleportLogistics's models, screen texture, and native-style icon family."""
+"""Generate TeleportLogisticsContinued's models, screen texture, and native-style icon family."""
 
 from pathlib import Path
 import sys
@@ -18,7 +18,7 @@ ASSETS = ROOT / "assets"
 MODELS = ASSETS / "models"
 ICONS = ASSETS / "icons"
 TEXTURES = ASSETS / "textures"
-RESOURCES = ROOT / "TeleportLogistics" / "Resources"
+RESOURCES = ROOT / "TeleportLogisticsContinued" / "Resources"
 MODEL_NAMES = ("ItemInput", "ItemOutput", "FluidInput", "FluidOutput", "Hub", "TravelHub")
 for directory in (MODELS, ICONS, TEXTURES, RESOURCES):
     directory.mkdir(parents=True, exist_ok=True)

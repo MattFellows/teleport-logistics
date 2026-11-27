@@ -1,4 +1,4 @@
-"""Render transparent 512 px building icons from TeleportLogistics's final OBJ models.
+"""Render transparent 512 px building icons from TeleportLogisticsContinued's final OBJ models.
 
 Satisfactory building descriptors use model captures rather than flat symbols. This
 script mirrors Coffee Stain's documented icon setup: three-point lighting and a

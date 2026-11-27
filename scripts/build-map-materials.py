@@ -1,4 +1,4 @@
-"""Create persistent native map/compass materials for TeleportLogistics's five markers.
+"""Create persistent native map/compass materials for TeleportLogisticsContinued's five markers.
 
 The sidebar uses GetActorRepresentationTexture, but the map's shared
 Widget_MapCompass_Icon uses a material. A null compass material leaves its
@@ -6,7 +6,7 @@ image brush white even when the sidebar texture works.
 """
 import unreal
 
-unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogistics"], True)
+unreal.AssetRegistryHelpers.get_asset_registry().scan_paths_synchronous(["/TeleportLogisticsContinued"], True)
 parent_path = "/Game/FactoryGame/Interface/UI/Minimap/IconMaterials/MI_CompassIcon_Static"
 parent = unreal.EditorAssetLibrary.load_asset(parent_path)
 if not isinstance(parent, unreal.MaterialInstanceConstant):
@@ -14,14 +14,14 @@ if not isinstance(parent, unreal.MaterialInstanceConstant):
 tools = unreal.AssetToolsHelpers.get_asset_tools()
 for name in ("ItemInput", "ItemOutput", "FluidInput", "FluidOutput", "Hub"):
     asset_name = f"MI_TeleporterMap{name}"
-    path = f"/TeleportLogistics/Icons/{asset_name}"
+    path = f"/TeleportLogisticsContinued/Icons/{asset_name}"
     material = unreal.EditorAssetLibrary.load_asset(path) if unreal.EditorAssetLibrary.does_asset_exist(path) else None
     if material is None:
-        material = tools.create_asset(asset_name, "/TeleportLogistics/Icons", unreal.MaterialInstanceConstant,
+        material = tools.create_asset(asset_name, "/TeleportLogisticsContinued/Icons", unreal.MaterialInstanceConstant,
                                       unreal.MaterialInstanceConstantFactoryNew())
     if not isinstance(material, unreal.MaterialInstanceConstant):
         raise RuntimeError("Could not create " + path)
-    texture = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogistics/Icons/M_Teleporter{name}")
+    texture = unreal.EditorAssetLibrary.load_asset(f"/TeleportLogisticsContinued/Icons/M_Teleporter{name}")
     if not isinstance(texture, unreal.Texture2D):
         raise RuntimeError("Missing map texture " + name)
     unreal.MaterialEditingLibrary.set_material_instance_parent(material, parent)

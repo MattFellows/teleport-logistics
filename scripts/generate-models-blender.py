@@ -1,4 +1,4 @@
-"""Generate TeleportLogistics's game-ready static mesh sources with Blender.
+"""Generate TeleportLogisticsContinued's game-ready static mesh sources with Blender.
 
 The five models use Unreal centimetres and Satisfactory's connector convention:
 local +X points away from the building. Stock-scale connector meshes are
