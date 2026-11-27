@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0
+
+Teleport Logistics Continued now has two version lines:
+
+- **1.x** (this one) adds fixes and improvements on top of the original mod.
+- **0.6.x** keeps the original mod's functionality unchanged and only follows it, plus fixes needed to run on new game updates. Pick a 0.6.x version in your mod manager if you want the original behaviour.
+
+Saves are compatible both ways between 0.6.x and 1.x.
+
+### Controller and Steam Deck support
+
+- **B** closes the teleporter, hub and Personnel Teleporter windows.
+- **D-pad** or **left stick** moves between buttons and text fields, scrolling lists to keep the selection in view. An orange outline shows the selected control while a controller is in use.
+- **A** presses the selected button.
+- **A** on a text field starts editing. On Steam Deck in Gaming Mode it opens Steam's on-screen keyboard. Elsewhere, such as Desktop Mode, it opens a built-in keyboard: D-pad to choose, A to type, X to delete, Y for space, B or Menu when done.
+
 ## 0.6.0 (Teleport Logistics Continued)
 
 - Published as Teleport Logistics Continued, a continuation of josh-tf's Teleport Logistics. The mod reference is now `TeleportLogisticsContinued`; saves made with the original mod load with their buildings and routes, because the old `/Script/TeleportLogistics` names are redirected to the new module.

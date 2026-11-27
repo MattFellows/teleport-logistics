@@ -1,8 +1,8 @@
 {
   "FileVersion": 3,
-  "Version": 0,
-  "VersionName": "0.6.0",
-  "SemVersion": "0.6.0",
+  "Version": 1,
+  "VersionName": "1.0.0",
+  "SemVersion": "1.0.0",
   "FriendlyName": "Teleport Logistics Continued",
   "Description": "Continuation of Teleport Logistics by josh-tf, updated for Satisfactory 1.2.6. Teleport items, fluids and Pioneers through named networks. Loads saves made with the original mod.",
   "CreatedBy": "MattFellows (original by josh-tf)",

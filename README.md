@@ -4,6 +4,8 @@ A continuation of [Teleport Logistics](https://github.com/josh-tf/teleport-logis
 
 **Switching from the original mod:** remove Teleport Logistics and install Teleport Logistics Continued. Existing saves load with their teleporters, hubs and routes intact. Don't install both together. Mod settings start from their defaults again.
 
+**Versions:** 1.x adds fixes and improvements, starting with controller and Steam Deck support. 0.6.x keeps the original mod's functionality and only follows it. Saves work with either.
+
 ![Teleport Logistics](docs/media/banner.png)
 
 An unofficial mod for [Satisfactory](https://www.satisfactorygame.com/) by Coffee Stain Studios, built on [SML](https://ficsit.app/). Teleport items, fluids and Pioneers between distant parts of your factory. Use named routes for logistics and a destination directory for personal travel. Get it on [ficsit.app](https://ficsit.app/mod/TeleportLogisticsContinued).
