@@ -7,6 +7,8 @@
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SScrollBox.h"
 #include "Widgets/SWidget.h"
+#include "HAL/PlatformProcess.h"
+#include "TeleportLogisticsLog.h"
 
 namespace
 {
@@ -124,6 +126,42 @@ void Focus(const TSharedPtr<SWidget> &Target, uint32 UserIndex)
                                                                          EDescendantScrollDestination::IntoView, 8);
 }
 
+TSharedPtr<SWidget> FindType(const TSharedRef<SWidget> &Widget, FName Type)
+{
+    if (Widget->GetType() == Type)
+        return Widget;
+    if (FChildren *Children = Widget->GetChildren())
+        for (int32 I = 0; I < Children->Num(); ++I)
+            if (TSharedPtr<SWidget> Found = FindType(Children->GetChildAt(I), Type))
+                return Found;
+    return nullptr;
+}
+
+// Asks Steam for its floating on-screen keyboard (Steam Deck, Gaming Mode) just below the
+// field. It types into whatever has focus, so the text box must be focused first. Goes
+// through the Steamworks flat API in the game's own steam_api64.dll; Epic builds and
+// older Steam clients simply return false, and Steam + X still works.
+bool ShowSteamKeyboard(const FGeometry &Field)
+{
+    using FSteamUtils = void *(*)();
+    using FShowFloating = bool (*)(void *, int32, int32, int32, int32, int32);
+    static void *Dll = FPlatformProcess::GetDllHandle(TEXT("steam_api64.dll"));
+    if (!Dll)
+        return false;
+    static auto *Utils = reinterpret_cast<FSteamUtils>(FPlatformProcess::GetDllExport(Dll, TEXT("SteamAPI_SteamUtils_v010")));
+    static auto *Show = reinterpret_cast<FShowFloating>(
+        FPlatformProcess::GetDllExport(Dll, TEXT("SteamAPI_ISteamUtils_ShowFloatingGamepadTextInput")));
+    void *Self = Utils ? Utils() : nullptr;
+    if (!Self || !Show)
+        return false;
+    const FVector2D TopLeft = Field.LocalToAbsolute(FVector2D::ZeroVector);
+    const FVector2D Size = Field.GetAbsoluteSize();
+    // 0 = k_EFloatingGamepadTextInputModeModeSingleLine. The rectangle is the area the
+    // keyboard must not cover.
+    return Show(Self, 0, FMath::RoundToInt(TopLeft.X), FMath::RoundToInt(TopLeft.Y), FMath::RoundToInt(Size.X),
+                FMath::RoundToInt(Size.Y));
+}
+
 bool Direction(const FKey &Key, EUINavigation &Out)
 {
     if (Key == EKeys::Gamepad_DPad_Up || Key == EKeys::Gamepad_LeftStick_Up)
@@ -176,8 +214,13 @@ TeleportLogisticsGamepad::EResult TeleportLogisticsGamepad::HandleKey(const TSha
             Focus(First(Candidates), User);
             return EResult::Handled;
         }
-        // Text boxes keep A for their own editing.
-        return EResult::Unhandled;
+        // A on a text box starts editing, as a click would, and opens Steam's keyboard.
+        const TSharedPtr<SWidget> Editor = FindType(At.ToSharedRef(), TEXT("SEditableText"));
+        FSlateApplication::Get().SetUserFocus(User, Editor ? Editor : At, EFocusCause::Mouse);
+        const bool Shown = ShowSteamKeyboard(At->GetPaintSpaceGeometry());
+        UE_LOG(LogTeleportLogistics, Log, TEXT("Gamepad: editing text field, Steam keyboard %s"),
+               Shown ? TEXT("requested") : TEXT("unavailable (use Steam + X)"));
+        return EResult::Handled;
     }
 
     if (!At)
