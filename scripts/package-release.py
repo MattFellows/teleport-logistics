@@ -126,9 +126,9 @@ def main() -> None:
         "Resources/ICONS-NOTICE.md",
         "Binaries/Win64/FactoryGameSteam-TeleportLogisticsContinued-Win64-Shipping.dll",
         "Binaries/Win64/FactoryGameEGS-TeleportLogisticsContinued-Win64-Shipping.dll",
-        "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.pak",
-        "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.utoc",
-        "Content/Paks/Windows/TeleportLogisticsFactoryGame-Windows.ucas",
+        "Content/Paks/Windows/TeleportLogisticsContinuedFactoryGame-Windows.pak",
+        "Content/Paks/Windows/TeleportLogisticsContinuedFactoryGame-Windows.utoc",
+        "Content/Paks/Windows/TeleportLogisticsContinuedFactoryGame-Windows.ucas",
     )
     required_server = (
         "TeleportLogisticsContinued.uplugin",
@@ -137,9 +137,9 @@ def main() -> None:
         "Resources/MODELING-NOTICE.md",
         "Resources/ICONS-NOTICE.md",
         "Binaries/Win64/FactoryServer-TeleportLogisticsContinued-Win64-Shipping.dll",
-        "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.pak",
-        "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.utoc",
-        "Content/Paks/WindowsServer/TeleportLogisticsFactoryGame-WindowsServer.ucas",
+        "Content/Paks/WindowsServer/TeleportLogisticsContinuedFactoryGame-WindowsServer.pak",
+        "Content/Paks/WindowsServer/TeleportLogisticsContinuedFactoryGame-WindowsServer.utoc",
+        "Content/Paks/WindowsServer/TeleportLogisticsContinuedFactoryGame-WindowsServer.ucas",
     )
     verify_archive(args.client, version, required_client)
     verify_archive(args.server, version, required_server)
