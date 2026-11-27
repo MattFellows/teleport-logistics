@@ -22,6 +22,7 @@
 #include "Widgets/Layout/SScrollBox.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/Input/SButton.h"
+#include "TeleportLogisticsGamepad.h"
 #include "Widgets/Input/SComboButton.h"
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Widgets/Notifications/SProgressBar.h"
@@ -1054,6 +1055,19 @@ FReply UTeleportLogisticsWidget::Close()
 }
 FReply UTeleportLogisticsWidget::NativeOnPreviewKeyDown(const FGeometry &Geometry, const FKeyEvent &Key)
 {
+    if (TeleportLogisticsGamepad::IsGamepadKey(Key))
+    {
+        GamepadActive = true;
+        switch (TeleportLogisticsGamepad::HandleKey(ContentRoot, Key))
+        {
+        case TeleportLogisticsGamepad::EResult::Close:
+            return Close();
+        case TeleportLogisticsGamepad::EResult::Handled:
+            return FReply::Handled();
+        default:
+            break;
+        }
+    }
     // Preview runs before editable fields can consume Escape to cancel editing.
     if (Key.GetKey() == EKeys::Escape)
         return Close();
@@ -1096,4 +1110,18 @@ void UTeleportLogisticsWidget::ReleaseSlateResources(bool Children)
     Status.Reset();
     DirectorySearch.Reset();
     ConfirmationHost.Reset();
+}
+int32 UTeleportLogisticsWidget::NativePaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
+                                            const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements,
+                                            int32 LayerId, const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const
+{
+    const int32 Layer =
+        Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
+    return GamepadActive && !Closing ? TeleportLogisticsGamepad::PaintFocus(ContentRoot, OutDrawElements, Layer) : Layer;
+}
+FReply UTeleportLogisticsWidget::NativeOnMouseMove(const FGeometry &Geometry, const FPointerEvent &Mouse)
+{
+    if (!Mouse.GetCursorDelta().IsNearlyZero())
+        GamepadActive = false;
+    return Super::NativeOnMouseMove(Geometry, Mouse);
 }

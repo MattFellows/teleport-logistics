@@ -29,6 +29,12 @@ class TELEPORTLOGISTICSCONTINUED_API UTeleportLogisticsWidget : public UFGIntera
     virtual void NativeDestruct() override;
     virtual FReply NativeOnPreviewKeyDown(const FGeometry &Geometry, const FKeyEvent &Key) override;
     virtual FReply NativeOnKeyDown(const FGeometry &Geometry, const FKeyEvent &Key) override;
+    virtual int32 NativePaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry, const FSlateRect &MyCullingRect,
+                              FSlateWindowElementList &OutDrawElements, int32 LayerId, const FWidgetStyle &InWidgetStyle,
+                              bool bParentEnabled) const override;
+    virtual FReply NativeOnMouseMove(const FGeometry &Geometry, const FPointerEvent &Mouse) override;
+    // Set by a gamepad key, cleared by the mouse or trackpad: shows the focus outline.
+    bool GamepadActive = false;
     virtual void OnEscapePressed_Implementation() override;
     virtual void ReleaseSlateResources(bool ReleaseChildren) override;
 

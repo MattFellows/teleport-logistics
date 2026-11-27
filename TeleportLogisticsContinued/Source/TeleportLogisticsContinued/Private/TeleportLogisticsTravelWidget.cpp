@@ -21,6 +21,7 @@
 #include "FGIconDatabaseSubsystem.h"
 #include "Engine/Texture2D.h"
 #include "Widgets/Images/SImage.h"
+#include "TeleportLogisticsGamepad.h"
 
 namespace
 {
@@ -392,6 +393,19 @@ void UTeleportLogisticsTravelWidget::OnEscapePressed_Implementation()
 }
 FReply UTeleportLogisticsTravelWidget::NativeOnPreviewKeyDown(const FGeometry &G, const FKeyEvent &K)
 {
+    if (TeleportLogisticsGamepad::IsGamepadKey(K))
+    {
+        GamepadActive = true;
+        switch (TeleportLogisticsGamepad::HandleKey(Root, K))
+        {
+        case TeleportLogisticsGamepad::EResult::Close:
+            return Close();
+        case TeleportLogisticsGamepad::EResult::Handled:
+            return FReply::Handled();
+        default:
+            break;
+        }
+    }
     return K.GetKey() == EKeys::Escape ? Close() : Super::NativeOnPreviewKeyDown(G, K);
 }
 void UTeleportLogisticsTravelWidget::NativeDestruct()
@@ -541,4 +555,19 @@ void UTeleportLogisticsTravelWidget::ShowIcons()
     }
     if (Icons.IsEmpty())
         Rows->AddSlot().AutoHeight()[Caption(TEXT("No matching icons."))];
+}
+int32 UTeleportLogisticsTravelWidget::NativePaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
+                                                  const FSlateRect &MyCullingRect,
+                                                  FSlateWindowElementList &OutDrawElements, int32 LayerId,
+                                                  const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const
+{
+    const int32 Layer =
+        Super::NativePaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
+    return GamepadActive ? TeleportLogisticsGamepad::PaintFocus(Root, OutDrawElements, Layer) : Layer;
+}
+FReply UTeleportLogisticsTravelWidget::NativeOnMouseMove(const FGeometry &Geometry, const FPointerEvent &Mouse)
+{
+    if (!Mouse.GetCursorDelta().IsNearlyZero())
+        GamepadActive = false;
+    return Super::NativeOnMouseMove(Geometry, Mouse);
 }
