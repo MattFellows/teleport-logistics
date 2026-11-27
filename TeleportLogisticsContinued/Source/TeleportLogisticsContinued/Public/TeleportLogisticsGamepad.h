@@ -26,6 +26,10 @@ EResult HandleKey(const TSharedPtr<SWidget> &Root, const FKeyEvent &Key);
 // controller is in use.
 bool IsGamepadKey(const FKeyEvent &Key);
 
+// True while the built-in on-screen keyboard is open over this window. The window then
+// sends it every key and blocks engine navigation, so nothing moves underneath.
+bool KeyboardOpen(const TSharedPtr<SWidget> &Root);
+
 // Draws an outline around the focused control. Call from NativePaint.
 int32 PaintFocus(const TSharedPtr<SWidget> &Root, FSlateWindowElementList &OutDrawElements, int32 LayerId);
 } // namespace TeleportLogisticsGamepad

@@ -393,7 +393,7 @@ void UTeleportLogisticsTravelWidget::OnEscapePressed_Implementation()
 }
 FReply UTeleportLogisticsTravelWidget::NativeOnPreviewKeyDown(const FGeometry &G, const FKeyEvent &K)
 {
-    if (TeleportLogisticsGamepad::IsGamepadKey(K))
+    if (TeleportLogisticsGamepad::IsGamepadKey(K) || TeleportLogisticsGamepad::KeyboardOpen(Root))
     {
         GamepadActive = true;
         switch (TeleportLogisticsGamepad::HandleKey(Root, K))
@@ -570,4 +570,16 @@ FReply UTeleportLogisticsTravelWidget::NativeOnMouseMove(const FGeometry &Geomet
     if (!Mouse.GetCursorDelta().IsNearlyZero())
         GamepadActive = false;
     return Super::NativeOnMouseMove(Geometry, Mouse);
+}
+FNavigationReply UTeleportLogisticsTravelWidget::NativeOnNavigation(const FGeometry &Geometry, const FNavigationEvent &Event,
+                                                const FNavigationReply &DefaultReply)
+{
+    // The on-screen keyboard owns the controller while it is open.
+    return TeleportLogisticsGamepad::KeyboardOpen(Root) ? FNavigationReply::Stop()
+                                                            : Super::NativeOnNavigation(Geometry, Event, DefaultReply);
+}
+FReply UTeleportLogisticsTravelWidget::NativeOnAnalogValueChanged(const FGeometry &Geometry, const FAnalogInputEvent &Event)
+{
+    return TeleportLogisticsGamepad::KeyboardOpen(Root) ? FReply::Handled()
+                                                            : Super::NativeOnAnalogValueChanged(Geometry, Event);
 }

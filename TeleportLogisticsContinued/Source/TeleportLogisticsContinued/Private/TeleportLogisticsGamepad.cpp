@@ -203,13 +203,6 @@ void TypeChar(TCHAR C, uint32 User)
     FSlateApplication::Get().ProcessKeyCharEvent(FCharacterEvent(C, FModifierKeysState(), User, false));
 }
 
-void TypeKey(const FKey &Key, uint32 User)
-{
-    const FKeyEvent Event(Key, FModifierKeysState(), User, false, 0, 0);
-    FSlateApplication::Get().ProcessKeyDownEvent(Event);
-    FSlateApplication::Get().ProcessKeyUpEvent(Event);
-}
-
 int32 RowLength(int32 Row)
 {
     return Row < CharRows ? FCString::Strlen(Rows[Row]) : SpecialCount;
@@ -233,7 +226,7 @@ void KeyboardPress(uint32 User)
         TypeChar(TEXT(' '), User);
         break;
     case 2:
-        TypeKey(EKeys::BackSpace, User);
+        TypeChar(TEXT('\b'), User); // Slate text fields take backspace as a character
         break;
     default:
         Keyboard.Root.Reset();
@@ -250,21 +243,21 @@ bool KeyboardKey(const FKey &K, uint32 User)
         // Keep roughly the same horizontal position between the 10-key and 4-key rows.
         Keyboard.Col = FMath::Clamp(Keyboard.Col * RowLength(Keyboard.Row) / OldLen, 0, RowLength(Keyboard.Row) - 1);
     };
-    if (K == EKeys::Gamepad_DPad_Up || K == EKeys::Gamepad_LeftStick_Up)
+    if (K == EKeys::Gamepad_DPad_Up || K == EKeys::Gamepad_LeftStick_Up || K == EKeys::Up)
         MoveRow(-1);
-    else if (K == EKeys::Gamepad_DPad_Down || K == EKeys::Gamepad_LeftStick_Down)
+    else if (K == EKeys::Gamepad_DPad_Down || K == EKeys::Gamepad_LeftStick_Down || K == EKeys::Down)
         MoveRow(1);
-    else if (K == EKeys::Gamepad_DPad_Left || K == EKeys::Gamepad_LeftStick_Left)
+    else if (K == EKeys::Gamepad_DPad_Left || K == EKeys::Gamepad_LeftStick_Left || K == EKeys::Left)
         Keyboard.Col = (Keyboard.Col + OldLen - 1) % OldLen;
-    else if (K == EKeys::Gamepad_DPad_Right || K == EKeys::Gamepad_LeftStick_Right)
+    else if (K == EKeys::Gamepad_DPad_Right || K == EKeys::Gamepad_LeftStick_Right || K == EKeys::Right)
         Keyboard.Col = (Keyboard.Col + 1) % OldLen;
-    else if (K == EKeys::Gamepad_FaceButton_Bottom)
+    else if (K == EKeys::Gamepad_FaceButton_Bottom || K == EKeys::Enter)
         KeyboardPress(User);
-    else if (K == EKeys::Gamepad_FaceButton_Left)
-        TypeKey(EKeys::BackSpace, User);
+    else if (K == EKeys::Gamepad_FaceButton_Left || K == EKeys::BackSpace)
+        TypeChar(TEXT('\b'), User);
     else if (K == EKeys::Gamepad_FaceButton_Top)
         TypeChar(TEXT(' '), User);
-    else if (K == EKeys::Gamepad_FaceButton_Right || K == EKeys::Gamepad_Special_Right)
+    else if (K == EKeys::Gamepad_FaceButton_Right || K == EKeys::Gamepad_Special_Right || K == EKeys::Escape)
         Keyboard.Root.Reset();
     else
         return false;
@@ -337,6 +330,11 @@ bool Direction(const FKey &Key, EUINavigation &Out)
     return true;
 }
 } // namespace
+
+bool TeleportLogisticsGamepad::KeyboardOpen(const TSharedPtr<SWidget> &Root)
+{
+    return KeyboardOpenFor(Root);
+}
 
 bool TeleportLogisticsGamepad::IsGamepadKey(const FKeyEvent &Key)
 {
@@ -413,6 +411,9 @@ int32 TeleportLogisticsGamepad::PaintFocus(const TSharedPtr<SWidget> &Root, FSla
     }
     static const FSlateRoundedBoxBrush Outline(FLinearColor::Transparent, 3.f, FLinearColor(0.98f, 0.58f, 0.13f),
                                                2.f);
-    FSlateDrawElement::MakeBox(OutDrawElements, LayerId + 1, At->GetPaintSpaceGeometry().ToPaintGeometry(), &Outline);
+    // A rounded box fills with the draw tint, which defaults to white: pass the brush's own
+    // transparent tint so only the outline shows.
+    FSlateDrawElement::MakeBox(OutDrawElements, LayerId + 1, At->GetPaintSpaceGeometry().ToPaintGeometry(), &Outline,
+                               ESlateDrawEffect::None, Outline.TintColor.GetSpecifiedColor());
     return KeyboardOpenFor(Root) ? PaintKeyboard(Root, OutDrawElements, LayerId + 1) : LayerId + 1;
 }

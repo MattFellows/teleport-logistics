@@ -33,6 +33,9 @@ class TELEPORTLOGISTICSCONTINUED_API UTeleportLogisticsWidget : public UFGIntera
                               FSlateWindowElementList &OutDrawElements, int32 LayerId, const FWidgetStyle &InWidgetStyle,
                               bool bParentEnabled) const override;
     virtual FReply NativeOnMouseMove(const FGeometry &Geometry, const FPointerEvent &Mouse) override;
+    virtual FNavigationReply NativeOnNavigation(const FGeometry &Geometry, const FNavigationEvent &Event,
+                                                const FNavigationReply &DefaultReply) override;
+    virtual FReply NativeOnAnalogValueChanged(const FGeometry &Geometry, const FAnalogInputEvent &Event) override;
     // Set by a gamepad key, cleared by the mouse or trackpad: shows the focus outline.
     bool GamepadActive = false;
     virtual void OnEscapePressed_Implementation() override;
